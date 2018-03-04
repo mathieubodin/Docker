@@ -14,7 +14,28 @@ docker run -t -i mathieubodin/jdk8:latest
 
 ## jdk8
 
+L'image est basée sur centos:7.2.1511.
+
 TBD
+
+## nginx
+
+L'image est basée sur centos:7.2.1511.
+
+Nginx est installé depuis les sources, ce qui explique la taille de l'image.
+
+### 1.10.1
+
+| Variable d'environnement | Valeur par défaut |
+| :----------------------- | ----------------- |
+| NGINX_VERSION            | 1.10.1            |
+| NGINX_HOME               | /opt/nginx-1.10.1 |
+
+### Exemple d'utilisation
+
+```bash
+/Users/mathieu/Documents/Developpements/Java/workspaces/tbskernel-2.0.X/nginx
+```
 
 ## tomcat
 
@@ -33,32 +54,32 @@ catalina.sh jpda run
 La version de Tomcat installée est la [7.0.70](http://tomcat.apache.org/tomcat-7.0-doc/index.html), configurée comme suit :
 
 | Variable d'environnement | Valeur par défaut                                                         |
-| :---------------------- | ------------------------------------------------------------------------- |
-| TOMCAT_MAJOR_VERSION    | 7                                                                         |
-| TOMCAT_VERSION          | 7.0.70                                                                    |
-| CATALINA_HOME           | /opt/tomcat-7.0.70                                                        |
-| CATALINA_PORT_HTTP      | 8080                                                                      |
-| JPDA_TRANSPORT          | dt_socket                                                                 |
-| JPDA_ADDRESS            | 5050                                                                      |
-| JAVA_TOOL_OPTIONS       | -Dfile.encoding=UTF8                                                      |
-| JAVA_OPTS               | -server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR |
-| PATH                    | $CATALINA_HOME/bin:$PATH                                                  |
+| :----------------------- | ------------------------------------------------------------------------- |
+| TOMCAT_MAJOR_VERSION     | 7                                                                         |
+| TOMCAT_VERSION           | 7.0.70                                                                    |
+| CATALINA_HOME            | /opt/tomcat-7.0.70                                                        |
+| CATALINA_PORT_HTTP       | 8080                                                                      |
+| JPDA_TRANSPORT           | dt_socket                                                                 |
+| JPDA_ADDRESS             | 5050                                                                      |
+| JAVA_TOOL_OPTIONS        | -Dfile.encoding=UTF8                                                      |
+| JAVA_OPTS                | -server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR |
+| PATH                     | $CATALINA_HOME/bin:$PATH                                                  |
 
 ### 8.0
 
 La version de Tomcat installée est la [8.0.36](http://tomcat.apache.org/tomcat-8.0-doc/index.html), configurée comme suit :
 
 | Variable d'environnement | Valeur par défaut                                                         |
-| :---------------------- | ------------------------------------------------------------------------- |
-| TOMCAT_MAJOR_VERSION    | 8                                                                         |
-| TOMCAT_VERSION          | 8.0.36                                                                    |
-| CATALINA_HOME           | /opt/tomcat-8.0.36                                                        |
-| CATALINA_PORT_HTTP      | 8080                                                                      |
-| JPDA_TRANSPORT          | dt_socket                                                                 |
-| JPDA_ADDRESS            | 5050                                                                      |
-| JAVA_TOOL_OPTIONS       | -Dfile.encoding=UTF8                                                      |
-| JAVA_OPTS               | -server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR |
-| PATH                    | $CATALINA_HOME/bin:$PATH                                                  |
+| :----------------------- | ------------------------------------------------------------------------- |
+| TOMCAT_MAJOR_VERSION     | 8                                                                         |
+| TOMCAT_VERSION           | 8.0.36                                                                    |
+| CATALINA_HOME            | /opt/tomcat-8.0.36                                                        |
+| CATALINA_PORT_HTTP       | 8080                                                                      |
+| JPDA_TRANSPORT           | dt_socket                                                                 |
+| JPDA_ADDRESS             | 5050                                                                      |
+| JAVA_TOOL_OPTIONS        | -Dfile.encoding=UTF8                                                      |
+| JAVA_OPTS                | -server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR |
+| PATH                     | $CATALINA_HOME/bin:$PATH                                                  |
 
 ### 8.5
 
@@ -67,20 +88,20 @@ L'image est basée sur mathieubodin/jdk8:latest.
 La version de Tomcat installée est la [8.5.4](http://tomcat.apache.org/tomcat-8.5-doc/index.html), configurée comme suit :
 
 | Variable d'environnement | Valeur par défaut                                                         |
-| :---------------------- | ------------------------------------------------------------------------- |
-| TOMCAT_MAJOR_VERSION    | 8                                                                         |
-| TOMCAT_VERSION          | 8.5.4                                                                     |
-| CATALINA_HOME           | /opt/tomcat-8.5.4                                                         |
-| CATALINA_PORT_HTTP      | 8080                                                                      |
-| JPDA_TRANSPORT          | dt_socket                                                                 |
-| JPDA_ADDRESS            | 5050                                                                      |
-| JAVA_TOOL_OPTIONS       | -Dfile.encoding=UTF8                                                      |
-| JAVA_OPTS               | -server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR |
-| PATH                    | $CATALINA_HOME/bin:$PATH                                                  |
+| :----------------------- | ------------------------------------------------------------------------- |
+| TOMCAT_MAJOR_VERSION     | 8                                                                         |
+| TOMCAT_VERSION           | 8.5.4                                                                     |
+| CATALINA_HOME            | /opt/tomcat-8.5.4                                                         |
+| CATALINA_PORT_HTTP       | 8080                                                                      |
+| JPDA_TRANSPORT           | dt_socket                                                                 |
+| JPDA_ADDRESS             | 5050                                                                      |
+| JAVA_TOOL_OPTIONS        | -Dfile.encoding=UTF8                                                      |
+| JAVA_OPTS                | -server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR |
+| PATH                     | $CATALINA_HOME/bin:$PATH                                                  |
 
 ### Exemple d'utilisation
 
-Pour utiliser un des ces images afin d'y déployer des war Java, il faut préparer un peu le terrain.
+Pour utiliser une des ces images afin d'y déployer des war Java, il faut préparer un peu le terrain.
 
 Soit qu'on souhaite déployer l'application *mon_application.war*, on commencera par créer quelque part le répertoire ```mon_application```. Puis on positionnera la ligne de commande dans ce répertoire.
 

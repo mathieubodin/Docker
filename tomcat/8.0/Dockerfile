@@ -1,30 +1,28 @@
-FROM mathieubodin/jdk8:latest
-MAINTAINER Mathieu BODIN <mathieu.bodin@gmail.com>
+FROM alpine:latest as prepare-install
 
-ENV TOMCAT_MAJOR_VERSION 8
-ENV TOMCAT_VERSION 8.0.36
+LABEL MAINTAINER="mathieu.bodin@gmail.com"
 
-ENV CATALINA_HOME /opt/tomcat-"${TOMCAT_VERSION}"
-ENV CATALINA_PORT_HTTP 8080
+RUN mkdir -p /tomcat
 
-ENV JPDA_TRANSPORT=dt_socket
-ENV JPDA_ADDRESS=5050
+# Install Java
+ADD jdk-8u161-linux-x64.tar.gz /tomcat
 
-ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+# Install Tomcat
+ADD apache-tomcat-8.0.50.tar.gz /tomcat
 
-ENV JAVA_OPTS="-server -Xms1024m -Xmx4096m -Xss256k -Duser.language=fr -Duser.country=FR"
+# Configure Tomcat
+COPY tomcat-users.xml /tomcat/apache-tomcat-8.0.50/conf
 
-ENV PATH $CATALINA_HOME/bin:$PATH
+# Clean up
+RUN rm /tomcat/apache-tomcat-8.0.50/bin/*.bat
+RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/docs
+RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/examples
+RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/host-manager
 
-RUN curl -s -S -G https://www.apache.org/dist/tomcat/tomcat-"${TOMCAT_MAJOR_VERSION}"/v"${TOMCAT_VERSION}"/bin/apache-tomcat-"${TOMCAT_VERSION}".tar.gz -o /opt/tomcat-"${TOMCAT_VERSION}".tar.gz \
-	&& mkdir -p "${CATALINA_HOME}" \
-	&& tar xzf /opt/tomcat-"${TOMCAT_VERSION}".tar.gz -C "${CATALINA_HOME}" --strip-components=1 \
-	&& rm /opt/tomcat-"${TOMCAT_VERSION}".tar.gz
+FROM gcr.io/distroless/base
 
-COPY catalina.properties server.xml tomcat-users.xml "${CATALINA_HOME}/conf/"
+COPY --from=prepare-install /tomcat /
 
-EXPOSE $CATALINA_PORT_HTTP $JPDA_ADDRESS
+EXPOSE 8000 8005 8009 8080
 
-VOLUME ["${CATALINA_HOME}/shared", "${CATALINA_HOME}/logs", "${CATALINA_HOME}/webapps", "${CATALINA_HOME}/work", "${CATALINA_HOME}/temp"]
-
-CMD [ "catalina.sh", "jpda", "run" ]
+ENTRYPOINT [ "/jdk1.8.0_161/bin/java", "-Djava.util.logging.config.file=/apache-tomcat-8.0.50/conf/logging.properties",	"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager", "-Djdk.tls.ephemeralDHKeySize=2048","-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", "-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:8000,server=y,suspend=n", "-classpath", "/apache-tomcat-8.0.50/bin/bootstrap.jar:/apache-tomcat-8.0.50/bin/tomcat-juli.jar","-Dcatalina.base=/apache-tomcat-8.0.50", "-Dcatalina.home=/apache-tomcat-8.0.50", "-Dcatalina.admin.password=","-Djava.io.tmpdir=/apache-tomcat-8.0.50/temp", "org.apache.catalina.startup.Bootstrap","start" ]
