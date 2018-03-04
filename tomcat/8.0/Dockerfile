@@ -2,20 +2,28 @@ FROM alpine:latest as prepare-install
 
 LABEL MAINTAINER="mathieu.bodin@gmail.com"
 
+RUN apk add --no-cache curl
+
 RUN mkdir -p /tomcat
 
 # Install Java
-ADD jdk-8u161-linux-x64.tar.gz /tomcat
+RUN curl -L -S -s -b "oraclelicense=a" "http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz" -o /jdk-8u161-linux-x64.tar.gz
+RUN tar xzf /jdk-8u161-linux-x64.tar.gz -C /tomcat
 
 # Install Tomcat
-ADD apache-tomcat-8.0.50.tar.gz /tomcat
+RUN curl -s -S -G https://www.apache.org/dist/tomcat/tomcat-8/v8.0.50/bin/apache-tomcat-8.0.50.tar.gz -o /apache-tomcat-8.0.50.tar.gz
+RUN tar xzf /apache-tomcat-8.0.50.tar.gz -C /tomcat
 
 # Configure Tomcat
 COPY tomcat-users.xml /tomcat/apache-tomcat-8.0.50/conf
 
 # Clean up
+RUN apk del --no-cache curl
+RUN rm /jdk-8u161-linux-x64.tar.gz
+RUN rm /apache-tomcat-8.0.50.tar.gz
 RUN rm /tomcat/apache-tomcat-8.0.50/bin/*.bat
 RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/docs
+RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/ROOT
 RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/examples
 RUN rm -rf /tomcat/apache-tomcat-8.0.50/webapps/host-manager
 
