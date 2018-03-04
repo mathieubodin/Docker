@@ -5,7 +5,7 @@ ENV NGINX_VERSION 1.10.1
 
 ENV NGINX_HOME "/opt/nginx-${NGINX_VERSION}"
 
-RUN yum install -q -y --nogpgcheck make gcc pcre pcre-devel zlib-devel openssl-devel
+RUN yum install -q -y --nogpgcheck make gcc pcre pcre-devel zlib-devel openssl-devel epel-release certbot
 
 RUN curl -L -S -s "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -o "/opt/nginx-${NGINX_VERSION}-src.tar.gz" \
 	&& mkdir -p "/opt/nginx-${NGINX_VERSION}-src" \
@@ -21,4 +21,8 @@ ENV PATH $NGINX_HOME/sbin:$PATH
 
 EXPOSE 80 443
 
+# VOLUME ["${NGINX_HOME}/conf"]
+
 CMD ["nginx", "-g", "daemon off;"]
+
+#CMD ["/bin/bash"]
