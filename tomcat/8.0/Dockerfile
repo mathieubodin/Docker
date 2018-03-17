@@ -86,4 +86,16 @@ COPY --from=prepare-install /tomcat /
 
 EXPOSE 8000 8005 8009 8080
 
-ENTRYPOINT [ "/jdk/bin/java", "-Djava.util.logging.config.file=/apache-tomcat/conf/logging.properties",	"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager", "-Djdk.tls.ephemeralDHKeySize=2048","-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", "-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:8000,server=y,suspend=n", "-classpath", "/apache-tomcat/bin/bootstrap.jar:/apache-tomcat/bin/tomcat-juli.jar","-Dcatalina.base=/apache-tomcat", "-Dcatalina.home=/apache-tomcat", "-Dcatalina.admin.password=","-Djava.io.tmpdir=/apache-tomcat/temp", "org.apache.catalina.startup.Bootstrap","start" ]
+ENTRYPOINT [ "/jdk/bin/java" ]
+CMD [ "-Djava.util.logging.config.file=/apache-tomcat/conf/logging.properties", \
+      "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager", \
+      "-Djdk.tls.ephemeralDHKeySize=2048", \
+      "-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", \
+      "-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:8000,server=y,suspend=n", \
+      "-classpath", "/apache-tomcat/bin/bootstrap.jar:/apache-tomcat/bin/tomcat-juli.jar", \
+      "-Dcatalina.base=/apache-tomcat", \
+      "-Dcatalina.home=/apache-tomcat", \
+      "-Dcatalina.admin.password=", \
+      "-Djava.io.tmpdir=/apache-tomcat/temp", \
+      "org.apache.catalina.startup.Bootstrap", \
+      "start" ]
